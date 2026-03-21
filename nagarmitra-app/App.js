@@ -20,6 +20,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import OnboardingScreen from './src/screens/OnboardingScreen';
 import AuthScreen from './src/screens/AuthScreen';
 import { auth, onAuthStateChanged, signOut } from './src/lib/firebase';
+import BotpressWidget from './src/components/BotpressWidget';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -274,7 +275,8 @@ export default function App() {
   }
 
   return (
-    <NavigationContainer theme={theme}>
+    <View style={{ flex: 1 }}>
+      <NavigationContainer theme={theme}>
       {showOnboarding ? (
         <OnboardingScreen onDone={completeOnboarding} />
       ) : !user ? (
@@ -304,6 +306,8 @@ export default function App() {
         </Tab.Navigator>
       )}
     </NavigationContainer>
+    <BotpressWidget />
+  </View>
   );
 }
 

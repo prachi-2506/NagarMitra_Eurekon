@@ -3,21 +3,17 @@ import { firebaseAdmin } from '../config/firebaseAdmin.js';
 export function requireFirebaseAuth({ requireVerified = true } = {}) {
   return async function (req, res, next) {
     try {
+      if (!firebaseAdmin?.apps?.length && process.env.NODE_ENV === 'development') {
+           console.log("⚠️  Using mock Firebase auth because server lacks credentials.");
+           req.user = { uid: "mock-uid-dev", email: "test@example.com", email_verified: true };
+           return next();
+      }
+
       const authHeader = req.headers.authorization || '';
       const token = authHeader.startsWith('Bearer ')
         ? authHeader.slice('Bearer '.length)
         : null;
       if (!token) return res.status(401).json({ error: 'Missing Authorization header' });
-      
-      if (!firebaseAdmin?.apps?.length) {
-        if (process.env.NODE_ENV === 'development') {
-           // Allow mock authentication in development without a service account
-           console.log("⚠️  Using mock Firebase auth because server lacks credentials.");
-           req.user = { uid: "mock-uid-dev", email: "test@example.com", email_verified: true };
-           return next();
-        }
-        return res.status(500).json({ error: 'Auth not configured on server' });
-      }
 
       const decoded = await firebaseAdmin.auth().verifyIdToken(token);
       if (requireVerified && !decoded.email_verified) {
