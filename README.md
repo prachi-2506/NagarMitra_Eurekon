@@ -4,10 +4,8 @@
 
 | Member | Roll No |
 |---|---|
-| Aryan Rana | 2329107 |
 | Prachi Khatri | 2329130 |
 | Satakshi Roy | 2329059 |
-| Diptanshu Vishwa | 2329114 |
 
 
 
